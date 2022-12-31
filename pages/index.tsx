@@ -13,7 +13,7 @@ export function Paragraph(props) {
   );
 }
 
-export function Cards(props) {
+export function Cards(props: any) {
   const [show, setShow] = useState(1);
   const [likes, setLikes] = useState(0); //test
 
