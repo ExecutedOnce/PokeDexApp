@@ -2,20 +2,20 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-export function MoveList(){
-  const pokemonMoveList = pokemon["moves"];
-  pokemonMoveList.map((moveObject) => {
-    //return (<p>{moveObject["move"]["name"]}</p>
-            //<p>{moveObject["move"]["url"]}</p>);
-  });
-}
+// export function MoveList(){
+//   const pokemonMoveList = pokemon["moves"];
+//   pokemonMoveList.map((moveObject) => {
+//     //return (<p>{moveObject["move"]["name"]}</p>
+//             //<p>{moveObject["move"]["url"]}</p>);
+//   });
+// }
 export default function Pokemon() {
   const [pokemon, setPokemon] = useState(null);
   const [isloading, setIsloading] = useState(true);
   const [moveList, setMoveList] = useState([]);
   const router = useRouter();
   const { id } = router.query;
-  function GetMoves(urlPrompt) {
+  function GetMoves(urlPrompt: any) {
     //lists all moves, need to run a map .......................................
     fetch(`${urlPrompt}`)
       .then((response) => {
@@ -38,8 +38,9 @@ export default function Pokemon() {
       .then((json) => {
         setIsloading(false);
         setPokemon(json);
-        // console.log(json);
-        // console.log("test", json["name"]);
+        console.log(json);
+        console.log("test", json["name"]);
+        console.log(pokemon)
       });
   }, [router.isReady]);
 
@@ -58,14 +59,18 @@ export default function Pokemon() {
           <div className="card-body">
             <h5 className="card-title">Name: {pokemon["name"]}</h5>
             <h5 className="card-title">Weight: {pokemon["weight"]}</h5>
-            <h5>Abilities:</h5>
-            {(pokemon["moves"]).map((moveObject) => {
+            <h5>Abilities:{pokemon["name"]}</h5>
+            {/* {(pokemon["moves"]).map((moveObject: any) => {
               const fetechedMoves = GetMoves(moveObject["move"]["url"]);
               console.log(fetechedMoves, "testtt");
-              return <div className="card-text">{moveObject["move"]["name"]}{fetechedMoves}</div>
+              
+              return (<div className="card-text"  key={moveObject["move"]["name"]}>
+                {moveObject["move"]["name"]}
+                {fetechedMoves}
+               </div>)
               
 
-            })}
+            })} */}
             
             <Link href="/" className="btn btn-primary">
               Home
@@ -76,6 +81,7 @@ export default function Pokemon() {
     </>
   );
 }
+
 /* 
       <div class="card" style={{ width: "18rem" }}>
         <img

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
+import { KeyObject } from "crypto";
 export function Paragraph(props: any) {
   return (
     <>
@@ -23,12 +24,12 @@ export function Cards(props: any) {
   // when show is changed, makes you hit show for each card
   if (show == 0) {
     return (
-      <div class="card col-4 d-flex justify-content-center">
+      <div className="card col-4 d-flex justify-content-center">
         <button
           onClick={() => {
             setShow(show + 1);
           }}
-          class="btn btn-primary"
+          className="btn btn-primary"
         >
           Show card
         </button>
@@ -36,28 +37,27 @@ export function Cards(props: any) {
     );
   } else {
     return (
-      <div class="card col-4 d-flex justify-content-center">
+      <div className="card col-4 d-flex justify-content-center">
         <img
           src={props.src}
-          class="card-img-top"
+          className="card-img-top"
           //style={{ width: "${likes}px" }} //CHECK THIS--------!!!!!!!!!!! ${likes}
 
           alt="..."
         />
-        <div class="card-body">
-          
-          <Link href={{pathname: "pokemons/[id]", query: {id: props.id}}}>
-          <h5 class="card-title">{props.title}</h5>
+        <div className="card-body">
+          <Link href={{ pathname: "pokemons/[id]", query: { id: props.id } }}>
+            <h5 className="card-title">{props.title}</h5>
           </Link>
-          <p class="card-text">{props.text}</p>
-          {likes == 0 ? null : <p class="card-text">Likes: {likes}</p>}
+          <p className="card-text">{props.text}</p>
+          {likes == 0 ? null : <p className="card-text">Likes: {likes}</p>}
           {LikeButton != 0 ? null : (
             <button
               onClick={() => {
                 setLikes(likes + 1);
                 LikeClicked(LikeButton + 1);
               }}
-              class="btn btn-primary"
+              className="btn btn-primary"
             >
               {props.buttonText}
             </button>
@@ -68,7 +68,7 @@ export function Cards(props: any) {
   }
 }
 export default function App() {
-  function getIDFromPokemon(pokemon) {
+  function getIDFromPokemon(pokemon :any) {
     pokemon = pokemon.url
       .replace("https://pokeapi.co/api/v2/pokemon/", "")
       .replace("/", "");
@@ -78,7 +78,7 @@ export default function App() {
   // fetch pokemon json list below, convert to json
   const [offset, setOffset] = useState(0);
   const limit = 20;
-  const [pokemonList, setPokemonList] = useState([]);
+  const [pokemonList, setPokemonList] = useState<any[]>([]); //we have passed an "any" type to the hook. This solves the error since now TypeScript expects the array to have any kind of value.
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
@@ -96,21 +96,24 @@ export default function App() {
   console.log(pokemonList);
   console.log("nio");
   return (
+    <>
     <div className="App">
       <div className="container">
         <div className="row">
           {pokemonList.map((pokemon) => {
             //For each pokemon in list, create a card. Each pokemon has "name" entry.
             const id = getIDFromPokemon(pokemon);
-            return (
+            return(
+              <>
               <Cards
-                key={}
+                key={id}
                 buttonText="Like"
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
                 id={id}
                 title={pokemon["name"]}
                 text=""
               />
+              </>
             );
           })}
         </div>
@@ -127,7 +130,6 @@ export default function App() {
                 setOffset(offset + limit);
               }}
             >
-              
               More
             </button>
 
@@ -136,5 +138,5 @@ export default function App() {
         </div>
       </div>
     </div>
-  );
+    </>);
 }
